@@ -5,6 +5,9 @@ import { Button } from "@/components/ui";
 import { ProductCard } from "@/components/products/ProductCard";
 import { prisma } from "@/lib/prisma";
 
+// Force dynamic rendering to fetch data at request time
+export const dynamic = "force-dynamic";
+
 async function getFeaturedProducts() {
   try {
     const products = await prisma.product.findMany({
