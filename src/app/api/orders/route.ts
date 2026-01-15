@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { generateOrderNumber } from "@/lib/utils";
 import { addressSchema } from "@/lib/validations";
 import { SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from "@/lib/constants";
-import { Decimal } from "@/generated/prisma/runtime/library";
 
 export async function POST(request: Request) {
   try {
@@ -43,7 +42,7 @@ export async function POST(request: Request) {
     const orderItems: {
       productId: string;
       name: string;
-      price: Decimal;
+      price: number;
       quantity: number;
     }[] = [];
 
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
       orderItems.push({
         productId: product.id,
         name: product.name,
-        price: price,
+        price: Number(price),
         quantity: item.quantity,
       });
     }
@@ -89,9 +88,9 @@ export async function POST(request: Request) {
           orderNumber: generateOrderNumber(),
           userId: session.user.id,
           addressId: savedAddress.id,
-          subtotal: new Decimal(subtotal),
-          shippingCost: new Decimal(shippingCost),
-          total: new Decimal(total),
+          subtotal: subtotal,
+          shippingCost: shippingCost,
+          total: total,
           items: {
             create: orderItems,
           },
